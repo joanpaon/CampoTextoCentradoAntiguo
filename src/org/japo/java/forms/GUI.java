@@ -15,84 +15,89 @@
  */
 package org.japo.java.forms;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.util.Properties;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import org.japo.java.events.AEM;
+import org.japo.java.libraries.UtilesSwing;
 
 /**
  *
  * @author José A. Pacheco Ondoño - joanpaon@gmail.com
  */
 public class GUI extends JFrame {
-    // Tamaño de la ventana
-    public static final int VENTANA_ANC = 300;
-    public static final int VENTANA_ALT = 200;
-    
-    // Referencia a componentes
+
+    // Propiedades App
+    public static final String PRP_LOOK_AND_FEEL = "look_and_feel";
+    public static final String PRP_FAVICON = "favicon";
+
+    // Valores por Defecto
+    public static final String DEF_LOOK_AND_FEEL = UtilesSwing.LNF_NIMBUS;
+    public static final String DEF_FAVICON = "img/favicon.png";
+
+    // Referencias
+    private Properties prp;
     private JPanel pnlPpal;
+    private JTextField txfColor;
 
-    public GUI() {
-        // Inicialización PREVIA
-        beforeInit();
+    // Constructor
+    public GUI(Properties prp) {
+        // Inicialización Anterior
+        initBefore(prp);
 
-        // Creación del interfaz
+        // Creación Interfaz
         initComponents();
 
-        // Inicialización POSTERIOR
-        afterInit();
+        // Inicializacion Posterior
+        initAfter();
     }
 
     // Construcción del IGU
     private void initComponents() {
-        // Fuente de texto
-        String nombreFuente = "Calibri";
-        int estiloFuente = Font.BOLD;
-        int tallaFuente = 30;
-        Font f = new Font(nombreFuente, estiloFuente, tallaFuente);
-
-        // Gestor de eventos de acción
-        AEM aem = new AEM(this);
-
-        // Otros componentes
-        JTextField txfColor = new JTextField();
-        txfColor.setFont(f);
+        // Campo de Texto
+        txfColor = new JTextField();
+        txfColor.setFont(new Font("Indie Flower", Font.BOLD, 30));
         txfColor.setColumns(10);
         txfColor.setHorizontalAlignment(JTextField.CENTER);
-        txfColor.addActionListener(aem);
-        
+        txfColor.addActionListener(new AEM(this));
+
         // Panel Principal
-        pnlPpal = new JPanel();
-        pnlPpal.setLayout(new FlowLayout(FlowLayout.CENTER));
+        pnlPpal = new JPanel(new GridBagLayout());
         pnlPpal.add(txfColor);
-        
+
         // Ventana principal
-        setTitle("Campo Texto Centrado");
         setContentPane(pnlPpal);
-        setSize(VENTANA_ANC, VENTANA_ALT);
+        setTitle("Swing Manual #05");
+        setResizable(false);
+        setSize(500, 300);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    // Inicialización antes del IGU
-    private void beforeInit() {
+    // Inicialización Anterior    
+    private void initBefore(Properties prp) {
+        // Memorizar Referencia
+        this.prp = prp;
 
+        // Establecer LnF
+        UtilesSwing.establecerLnF(prp.getProperty(PRP_LOOK_AND_FEEL, DEF_LOOK_AND_FEEL));
     }
 
-    // Inicialización después del IGU
-    private void afterInit() {
-
+    // Inicialización Anterior
+    private void initAfter() {
+        // Establecer Favicon
+        UtilesSwing.establecerFavicon(this, prp.getProperty(PRP_FAVICON, DEF_FAVICON));
     }
 
-    public void gestionarAceptarTexto(ActionEvent e) {
+    public void procesarTexto(ActionEvent e) {
         // Generador del evento
         JTextField txfActual = (JTextField) e.getSource();
-        
+
         // Determinar el color
         switch (txfActual.getText().toUpperCase()) {
             case "BLANCO":
@@ -109,10 +114,30 @@ public class GUI extends JFrame {
                 break;
             case "AZUL":
                 pnlPpal.setBackground(Color.BLUE);
+                break;
+            case "AMARILLO":
+                pnlPpal.setBackground(Color.YELLOW);
+                break;
+            case "GRIS":
+                pnlPpal.setBackground(Color.GRAY);
+                break;
+            case "ROSA":
+                pnlPpal.setBackground(Color.PINK);
+                break;
+            case "TURQUESA":
+                pnlPpal.setBackground(Color.CYAN);
+                break;
+            case "MAGENTA":
+                pnlPpal.setBackground(Color.MAGENTA);
+                break;
+            case "NARANJA":
+                pnlPpal.setBackground(Color.ORANGE);
+                break;
+            default:
+                pnlPpal.setBackground(new Color(240, 240, 240));
         }
-        
+
         // Borrar el campo de texto
         txfActual.setText("");
     }
-
 }

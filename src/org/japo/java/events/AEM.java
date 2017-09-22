@@ -28,6 +28,7 @@ public class AEM implements ActionListener {
     // Referencia al igu
     private final GUI gui;
 
+    // Constructor
     public AEM(GUI gui) {
         this.gui = gui;
     }
@@ -35,7 +36,6 @@ public class AEM implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         // LLamar a algún método de GUI
-        gui.gestionarAceptarTexto(e);
+        gui.procesarTexto(e);
     }
-
 }
